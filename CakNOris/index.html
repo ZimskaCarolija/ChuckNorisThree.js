@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Aleksa Velimirovic">
+    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r126/three.min.js" integrity="sha512-n8IpKWzDnBOcBhRlHirMZOUvEq2bLRMuJGjuVqbzUJwtTsgwOgK5aS0c1JA647XWYfqvXve8k3PtZdzpipFjgg==" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/three@0.126.0/examples/js/loaders/GLTFLoader.js"></script>
+
+    <script src="https://unpkg.com/three-orbitcontrols-ts@0.1.2/dist/index.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Bebas Neue">
+    <style>
+        * {
+            padding: 0;
+            box-sizing: border-box;
+            margin: 0;
+            text-align: center;
+            font-family: Bebas Neue;
+        }
+        
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            filter: drop-shadow(16px 16px 20px red) invert(5%);
+            filter: blur(2px);
+        }
+        
+        #dv {
+            text-align: center;
+        }
+        
+        #Sala:hover {
+            transition: 0.2s;
+            padding: 17px;
+            box-shadow: 7px 7px black;
+            filter: blur(5px);
+        }
+        
+        #Sala {
+            transition: 0.2s;
+            position: absolute;
+            z-index: 9;
+            bottom: 20%;
+            left: 10%;
+            width: 150px;
+            padding: 15px;
+            border: 0;
+            background-color: #eaf2d7;
+            font-size: 15px;
+            font-weight: 700;
+            color: black;
+            box-shadow: 2px 2px 0px #FFB650, 4px 4px 0px #FFD662, 6px 6px 0px #FF80BF;
+        }
+        
+        h1 {
+            position: relative;
+            z-index: 2;
+            padding: 5%;
+            font-weight: 700;
+            font-size: 5rem;
+            text-shadow: -15px 5px 20px #ced0d3;
+            letter-spacing: 0.02em;
+            text-align: center;
+            color: #F9f1cc;
+            text-shadow: 5px 5px 0px #FFB650, 10px 10px 0px #FFD662, 15px 15px 0px #FF80BF, 20px 20px 0px #EF5097, 25px 25px 0px #6868AC, 30px 30px 0px #90B1E0;
+        }
+        
+        #Meni {
+            transform: 0.3s;
+            position: absolute;
+            right: 5%;
+            font-size: 15px;
+            font-weight: 700;
+            top: 5%;
+            z-index: 50;
+            border: 0px solid black;
+            border-radius: 50%;
+            background-color: #6868AC;
+            width: 70px;
+            padding: 5px;
+            padding-top: 10px;
+        }
+        
+        #Meni img {
+            width: 100%;
+            height: 100%;
+        }
+        
+        #Meni:hover {
+            transition: 0.3s;
+            filter: blur(3px);
+        }
+        
+        #M {
+            z-index: 3;
+            transition: 0.4s;
+            position: absolute;
+            width: 0px;
+            right: 5%;
+            height: 0vh;
+            top: 5%;
+            display: block;
+            background-color: #FF80BF;
+            opacity: 0.8;
+            background-image: radial-gradient(#90B1E0 1.1px, #FF80BF 1.1px);
+            background-size: 22px 22px;
+            opacity: 0;
+        }
+        
+        #M div {
+            width: 100%;
+        }
+        
+        #M input {
+            width: 40%;
+        }
+        
+        label {
+            font-weight: 700;
+            font-size: 1em;
+            margin-top: 3%;
+            color: #F9f1cc;
+            text-shadow: 2px 2px 0px #FFB650, 4px 4px 0px #FFD662, 6px 6px 0px #FF80BF, 7px 7px 0px #EF5097, 9px 9px 0px #6868AC, 10px 10px 0px #90B1E0;
+            letter-spacing: 3px;
+        }
+        
+        #M div {
+            display: flex;
+            height: 60%;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        #Ucitavanje {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            z-index: 9999;
+            background-color: #FF80BF;
+            background-size: 20px 20px;
+            background-image: repeating-linear-gradient(to right, #FFB650, #FFB650 1px, #FF80BF 1px, #FF80BF);
+            font-size: 3em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #F9f1cc;
+            text-shadow: 2px 2px 0px #FFB650, 4px 4px 0px #FFD662, 6px 6px 0px #FF80BF, 7px 7px 0px #EF5097, 9px 9px 0px #6868AC, 10px 10px 0px #90B1E0;
+        }
+        
+        @media only screen and (max-width: 600px) {
+            #Sala {
+                width: 20%;
+            }
+            h1 {
+                font-size: 3rem;
+                text-shadow: 2px 2px 0px #FFB650, 4px 4px 0px #FFD662, 6px 6px 0px #FF80BF, 7px 7px 0px #EF5097, 9px 9px 0px #6868AC, 10px 10px 0px #90B1E0;
+            }
+        }
+    </style>
+
+
+</head>
+
+<body>
+    <div id="Ucitavanje">Ucitava se...</div>
+    <div id="dv">
+        <h1>Cak Noris fore</h1><button onclick="Fja()" id="Sala">Baci foru</button></div>
+    <div id="M">
+        <div>
+            <label for="zvuk" id="zvukL">Zvuk</label><br><input id="zvuk" type="range" min="0" max="100" value="10">
+            <label for="ton" id="tonL">Jacina Tona</label><br><input id="ton" type="range" min="0" max="100" value="10">
+        </div>
+    </div>
+    <button id="Meni" onclick="Meni()"><img src="bitmap.png"></button>
+
+    <script>
+        const Scena = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(25, window.innerWidth / window.innerHeight, 1, 20000);
+        const renderer = new THREE.WebGLRenderer({
+            alpha: true
+        });
+        camera.position.set(0, 3, 100);
+        camera.rotation.set(0, 0, 0.15);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setClearColor(0xefcfe3);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        document.getElementById("dv").appendChild(renderer.domElement);
+        const Ucitavac = new THREE.GLTFLoader()
+        var ambientLight = new THREE.AmbientLight(0xcccccc);
+        Scena.add(ambientLight);
+
+        var directionalLight = new THREE.DirectionalLight(0xffffff);
+        directionalLight.position.set(0, 1, 1).normalize();
+        Scena.add(directionalLight);
+        //const controls = new THREE.OrbitControls(camera, renderer.domElement)
+        Ucitavac.load(
+            // resource URL
+            'untitled.glb',
+            // called when the resource is loaded
+            function(gltf) {
+                gltf.scene.position.set(0, 0, 0);
+                gltf.scene.scale.set(1, 1, 1);
+                gltf.scene.rotation.set(0, -15, 0);
+                Scena.add(gltf.scene);
+
+                renderer.render(Scena, camera);
+                document.getElementById("Ucitavanje").style.display = "none";
+                animate();
+
+            });
+        window.addEventListener("resize", function() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        function animate() {
+
+            requestAnimationFrame(animate);
+
+            time = Date.now() * 0.001;
+
+            Scena.rotation.y += 0.01;
+
+            renderer.render(Scena, camera);
+
+        }
+    </script>
+    <script>
+        let govor = new SpeechSynthesisUtterance();
+        govor.lang = "en";
+        async function Fja() {
+            const response = await fetch("https://api.chucknorris.io/jokes/random");
+            const jsonData = await response.json();
+            var tekst = jsonData.value;
+            // console.log(document.getElementById("goog-te-combo"));
+            //speech.lang = document.getElementById("goog-te-combo").options[0].value;
+            govor.volume = document.getElementById("zvuk").value / 100;
+            govor.pitch = document.getElementById("ton").value / 50;
+            govor.text = tekst;
+            window.speechSynthesis.speak(govor);
+
+        }
+        var i = 0;
+
+        function Meni() {
+
+            if (i % 2 == 0) {
+                document.getElementById("M").style.height = "100vh";
+                document.getElementById("M").style.top = "0";
+                document.getElementById("M").style.borderRadius = "0";
+                document.getElementById("M").style.width = "50%";
+                document.getElementById("M").style.right = "0";
+                document.getElementById("M").style.opacity = "1";
+                document.getElementById("zvukL").style.fontSize = "2em";
+                document.getElementById("tonL").style.fontSize = "2em";
+
+            } else {
+                document.getElementById("M").style.height = "0vh";
+                document.getElementById("M").style.top = "5.7%";
+                document.getElementById("M").style.borderRadius = "50%";
+                document.getElementById("M").style.width = "0px";
+                document.getElementById("M").style.right = "5.7%";
+                document.getElementById("M").style.opacity = "0";
+                document.getElementById("zvukL").style.fontSize = "1em";
+                document.getElementById("tonL").style.fontSize = "1em";
+
+            }
+            i++;
+        }
+    </script>
+</body>
+
+</html>
